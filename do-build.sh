@@ -12,6 +12,28 @@ TIME_END=""
 
 
 ################################################################################
+## Args / Action
+################################################################################
+
+## default value
+DEFAULT_RUN_ACTION="build"
+
+## read from environment variable (RUN_ACTION=prepare do-build.sh)
+RUN_ACTION="${RUN_ACTION:=$DEFAULT_RUN_ACTION}"
+
+## read from argument (do-build.sh prepare)
+ARG_RUN_ACTION="${1}"
+
+## determine the value of RUN_ACTION
+RUN_ACTION="${ARG_RUN_ACTION:=$RUN_ACTION}"
+
+## ensure RUN_ACTION has a value.
+RUN_ACTION="${RUN_ACTION:=$DEFAULT_RUN_ACTION}"
+
+
+
+
+################################################################################
 ## Environment
 ################################################################################
 
