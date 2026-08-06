@@ -2498,8 +2498,6 @@ function portal_do_mount () {
 
 	core_check_permission
 
-	mod_bind_signal
-
 	model_do_mount
 
 }
@@ -2531,8 +2529,6 @@ function model_do_unmount () {
 function portal_do_unmount () {
 
 	core_check_permission
-
-	mod_bind_signal
 
 	model_do_unmount
 
