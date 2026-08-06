@@ -3029,6 +3029,18 @@ function portal_do_test () {
 ## Action
 ################################################################################
 
+function action_create_full_system () {
+
+	portal_do_create_full_system
+
+}
+
+function action_archive_system_to_iso () {
+
+	portal_do_archive_system_to_iso
+
+}
+
 function action_mount () {
 
 	portal_do_mount
