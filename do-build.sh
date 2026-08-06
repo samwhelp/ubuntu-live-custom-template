@@ -18,7 +18,7 @@ TIME_END=""
 ## default value
 DEFAULT_RUN_ACTION="build"
 
-## read from environment variable (RUN_ACTION=prepare do-build.sh)
+## read from environment variable (sudo RUN_ACTION=prepare do-build.sh) or (sudo env RUN_ACTION=prepare do-build.sh)
 RUN_ACTION="${RUN_ACTION:=$DEFAULT_RUN_ACTION}"
 
 ## read from argument (do-build.sh prepare)
@@ -2455,7 +2455,7 @@ function sys_create_filesystem_manifest_desktop_to_isodir () {
 
 
 ################################################################################
-## Model
+## Model and Portal
 ################################################################################
 
 
@@ -2498,9 +2498,24 @@ function model_do_prepare () {
 
 	echo "==== prepare ===="
 
-	#mod_prepare
+	mod_prepare
 
 }
+
+
+################################################################################
+## Portal / protal_do_prepare
+################################################################################
+
+function portal_do_prepare () {
+
+	core_check_permission
+
+	model_do_prepare
+
+}
+
+
 
 
 ################################################################################
@@ -2640,7 +2655,7 @@ function sys_chown_product_to_runer_user () {
 
 
 ################################################################################
-## Portal
+## Portal / portal_do_build
 ################################################################################
 
 function portal_do_build () {
@@ -2651,7 +2666,7 @@ function portal_do_build () {
 
 	mod_bind_signal
 
-	model_do_prepare
+	#model_do_prepare
 
 	model_do_build
 
@@ -2668,10 +2683,21 @@ function portal_do_build () {
 ## Action
 ################################################################################
 
+function action_prepare () {
+
+	portal_do_prepare
+
+}
+
 function action_build () {
 
-	echo "action_build"
-	#portal_do_build
+	portal_do_build
+
+}
+
+function action_clean () {
+
+	echo "action_clean"
 
 }
 
@@ -2685,8 +2711,23 @@ function main_run_action () {
 
 	local delegate="action_${run_action}"
 
-	"${delegate}"
+	if ! is_function_exist "${delegate}"; then
 
+		echo "################################################################################"
+		echo "## [Warning] Action Not Exist: ${delegate}"
+		echo "################################################################################"
+
+		echo "==== Run Action Example ===="
+		echo "sudo ./do-build.sh prepare"
+		echo "sudo ./do-build.sh build"
+		echo "sudo ./do-build.sh clean"
+
+		exit 1
+
+	fi
+
+
+	"${delegate}"
 }
 
 ################################################################################
@@ -2694,8 +2735,6 @@ function main_run_action () {
 ################################################################################
 
 function __main__ () {
-
-
 
 	main_run_action
 
