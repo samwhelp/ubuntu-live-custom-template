@@ -268,6 +268,45 @@ INSTALLER_PACKAGE_INSTALL_DIR_PATH="${INSTALLER_PACKAGE_DIR_PATH}/install"
 
 
 
+################################################################################
+## Util
+################################################################################
+
+
+################################################################################
+## Util / Command
+################################################################################
+
+is_function_exist () {
+
+	if type -p "${1}" > /dev/null; then
+		return 0
+	else
+		return 1
+	fi
+
+}
+
+# is_command_exist () {
+# 	if command -v "${1}" > /dev/null; then
+# 		return 0
+# 	else
+# 		return 1
+# 	fi
+# }
+
+is_command_exist () {
+
+	if [ -x "$(command -v ${1})" ]; then
+		return 0
+	else
+		return 1
+	fi
+
+}
+
+
+
 
 ################################################################################
 ## Module
@@ -1615,9 +1654,9 @@ __FULFILL_SCRIPT__
 function sys_run_fulfill_scripts_embedded () {
 
 	local target="${1}"
-	local delget="sys_run_fulfill_scripts_embedded_for_${target}"
+	local delegate="sys_run_fulfill_scripts_embedded_for_${target}"
 
-	"${delget}"
+	"${delegate}"
 
 }
 
@@ -2623,13 +2662,42 @@ function portal_do_build () {
 }
 
 
+
+
+################################################################################
+## Action
+################################################################################
+
+function action_build () {
+
+	echo "action_build"
+	#portal_do_build
+
+}
+
+################################################################################
+## Action / Main
+################################################################################
+
+function main_run_action () {
+
+	local run_action="${RUN_ACTION}"
+
+	local delegate="action_${run_action}"
+
+	"${delegate}"
+
+}
+
 ################################################################################
 ## Main
 ################################################################################
 
 function __main__ () {
 
-	portal_do_build
+
+
+	main_run_action
 
 }
 
